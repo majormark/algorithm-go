@@ -79,3 +79,53 @@ func ReversePart(h *Node, from int, to int) *Node {
 	return h
 
 }
+
+/**
+每K个节点逆序 p.68
+*/
+func ReverseKNode(h *Node, k int) *Node {
+	if h == nil {
+		return nil
+	}
+	if k <= 1 {
+		return h
+	}
+
+	cur := h
+	count := 1
+	var left *Node
+	var start *Node
+	var next *Node
+	for cur != nil {
+		next = cur.Next
+		if count == k {
+			if left == nil {
+				start = h
+				h = cur
+			} else {
+				start = left.Next
+			}
+			reverse(left, start, cur, next)
+			left = start
+			count = 0
+		}
+		count++
+		cur = cur.Next
+	}
+	return h
+}
+
+func reverse(left *Node, start *Node, end *Node, right *Node) {
+	pre := start
+	cur := start.Next
+	for cur != right {
+		next := cur.Next
+		cur.Next = pre
+		pre = cur
+		cur = next
+	}
+	if left != nil {
+		left.Next = end
+	}
+	start.Next = right
+}
